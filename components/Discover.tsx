@@ -4,6 +4,14 @@ import { useRouter } from "next/router";
 import { topics } from "../utils/constants";
 
 const Discover = () => {
+  const router = useRouter();
+  const { topic } = router.query;
+
+  const activeTopicStyle =
+    "xl:border-2 hover:bg-primary py-3 px-2 xl:border-[#f51997] rounded xl:rounded-full flex items-center gap-2 justify-center cursor-pointer text-[#f51997]";
+
+  const topicStyle =
+    "xl:border-2 hover:bg-primary py-3 px-2 xl:border-gray-300 rounded xl:rounded-full flex items-center gap-2 justify-center cursor-pointer text-black";
   return (
     <div className="xl:border-b-2 xl:border-gray-200">
       <p className="text-gray-500 font-semibold m-3 mt-4 hidden xl:block">
@@ -12,9 +20,13 @@ const Discover = () => {
       <div className="flex gap-3 flex-wrap">
         {topics.map((item) => (
           <Link href={`/?topic=${item.name}`} key={item.name}>
-            <div>
+            <div
+              className={topic === item.name ? activeTopicStyle : topicStyle}
+            >
               <span className="font-bold text-2xl xl:text-md">{item.icon}</span>
-              <span className="font-medium text-md hidden xl:block">{item.name}</span>
+              <span className="font-medium text-xs hidden xl:block capitalize">
+                {item.name}
+              </span>
             </div>
           </Link>
         ))}
