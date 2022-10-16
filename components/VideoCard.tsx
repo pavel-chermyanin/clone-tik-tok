@@ -14,7 +14,7 @@ interface IProps {
 const VideoCard: NextPage<IProps> = ({ post }) => {
   const [isHover, setIsHover] = useState(false);
   const [playing, setPlaying] = useState(false);
-  const [isVideoMutted, setIsVideoMutted] = useState(false);
+  const [isVideoMuted, setIsVideoMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const onVideoPress = () => {
@@ -26,6 +26,12 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
       setPlaying(true);
     }
   };
+
+  useEffect(() => {
+    if(videoRef?.current) {
+      videoRef.current.muted = isVideoMuted
+    }
+  }, [isVideoMuted]);
   return (
     <div className="flex flex-col border-b-2 border-gray-200 pb-6">
       <div className="">
@@ -66,8 +72,9 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
           onMouseLeave={() => setIsHover(false)}
           className="rounded-3xl"
         >
-          <Link href="/">
+          <Link href={`/detail/${post._id}`}>
             <video
+              // muted={isVideoMuted}
               ref={videoRef}
               loop
               className="lg:w-[600px] h-[300px] w-[200px] md:h-[400px] lg:h-[500px] rounded-2xl cursor-pointer bg-gray-200"
@@ -75,7 +82,7 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
             ></video>
           </Link>
           {isHover && (
-            <div className="absolute bottom-6 left-8 cursor-pointer md:left-14 lg:left-0 flex gap-10 lg:justify-between">
+            <div className="absolute bottom-6 left-8 cursor-pointer md:left-14 lg:left-0 flex gap-10 lg:justify-between w-[100px] md:w-[50px] p-3">
               {playing ? (
                 <button onClick={onVideoPress}>
                   <BsFillPauseFill className="text-black text-2xl lg:text-4xl" />
@@ -85,12 +92,12 @@ const VideoCard: NextPage<IProps> = ({ post }) => {
                   <BsFillPlayFill className="text-black text-2xl lg:text-4xl" />
                 </button>
               )}
-              {isVideoMutted ? (
-                <button onClick={() => setIsVideoMutted(false)}>
+              {isVideoMuted ? (
+                <button onClick={() => setIsVideoMuted(false)}>
                   <HiVolumeOff className="text-black text-2xl lg:text-4xl" />
                 </button>
               ) : (
-                <button onClick={() => setIsVideoMutted(true)}>
+                <button onClick={() => setIsVideoMuted(true)}>
                   <HiVolumeUp className="text-black text-2xl lg:text-4xl" />
                 </button>
               )}
